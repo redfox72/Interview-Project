@@ -1,38 +1,31 @@
-# Welcome to Remix!
+# Cryptocurrency dashboard
 
-- [Remix Docs](https://remix.run/docs)
+---
 
-## Development
+## Setup instructions
+---
+1. Clone this repository to your local machine.
+2. Ensure that [NPM/NPX is installed](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). 
+3. Run `npm i` to install dependencies.
+4. Run `npm run build`.
+5. Run `npm run start` to run as if the server was in production mode.
+6. Navigate to [the locally running server](http://localhost:3000)
 
-From your terminal:
+## Notes/tradeoffs
 
-```sh
-npm run dev
-```
+Included in this repository is the overall function for the cryptocurrency dashboard. `./app/root.tsx` is the main component.
 
-This starts your app in development mode, rebuilding assets on file changes.
+Everything is server sided rendered, and uses optimistic changes when required (IE when changing the order of cards). 
 
-## Deployment
+I used the public Coinbase API to get the [current list of cryptocurrencies](https://api.coinbase.com/v2/currencies/crypto), as well as the [exchange rate to USD](https://api.coinbase.com/v2/exchange-rates), and [the exchange rate to BTC](https://api.coinbase.com/v2/exchange-rates?currency=BTC). 
 
-First, build your app for production:
+The ordering is initially the return value from the CoinBase API (This could be changed fairly easily by updating the loader within `./app/data.ts`). 
 
-```sh
-npm run build
-```
+As long as the server is running the order is maintained for all users (this was a tradeoff because user login is not implemented as of yet, but if user login was added would be able to be maintained per user). I went this way instead of `localstorage` so that server side rendering/maintaince of order could be maintained. 
 
-Then run the app in production mode:
+When auto refresh is toggled the server will pull new data from CoinBase every 5 seconds. Clicking the refresh button or reloading the page will reload data immediately. 
 
-```sh
-npm start
-```
+The filter input will filter as its text is changed. 
 
-Now you'll need to pick a host to deploy it to.
+Reordering cards can be done by dragging a card onto the card you want to swap it with. If this is done while the view is filtered the cards will swap their _absolute_ positions (IE with a list of 1, 2, 3, filtering to 1, 3 and swapping to 3, 1 will result in a net list of 3, 2, 1). This was done for ease of implementation. 
 
-### DIY
-
-If you're familiar with deploying node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `remix build`
-
-- `build/server`
-- `build/client`

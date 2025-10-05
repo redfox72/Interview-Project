@@ -1,3 +1,5 @@
+# Previous interview project to have a responsive cryptocurrency dashboard. 
+
 # Cryptocurrency dashboard
 
 ---
